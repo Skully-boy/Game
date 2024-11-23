@@ -1,1 +1,73 @@
-okokok
+import pygame
+import sys
+
+# Initialize Pygame
+pygame.init()
+
+# Define screen dimensions
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Ecliptica: The Awakening")
+
+# Colors
+WHITE = (255, 255, 255)
+BLUE = (0, 128, 255)
+GREEN = (0, 255, 0)
+BLACK = (0, 0, 0)
+
+# Load the character image (use a simple placeholder for now)
+character = pygame.Surface((50, 100))  # Replace this with your character's image once you have it
+character.fill(GREEN)  # Color the placeholder character green for now
+
+# Define the character's position
+character_x = SCREEN_WIDTH // 2 - 25
+character_y = SCREEN_HEIGHT - 150
+
+# Jumping variables
+jumping = False
+jump_count = 10
+
+# Game loop
+running = True
+while running:
+    screen.fill(BLUE)  # Background color
+
+    # Check for events (e.g., key presses, window close)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+    
+    # Jumping logic
+    if jumping:
+        if jump_count >= -10:
+            neg = 1
+            if jump_count < 0:
+                neg = -1
+            character_y -= (jump_count ** 2) * 0.5 * neg
+            jump_count -= 1
+        else:
+            jumping = False
+            jump_count = 10
+
+    # Draw the character at the new position
+    screen.blit(character, (character_x, character_y))
+
+    # Display Play and Settings buttons (just rectangles for now)
+    pygame.draw.rect(screen, BLACK, pygame.Rect(50, 50, 200, 50))  # Play button
+    pygame.draw.rect(screen, BLACK, pygame.Rect(50, 150, 200, 50))  # Settings button
+    font = pygame.font.SysFont(None, 36)
+    play_text = font.render("Play", True, WHITE)
+    settings_text = font.render("Settings", True, WHITE)
+    screen.blit(play_text, (50 + 50, 50 + 10))
+    screen.blit(settings_text, (50 + 50, 150 + 10))
+
+    # Update the screen
+    pygame.display.flip()
+
+    # Set frame rate
+    pygame.time.Clock().tick(60)
+
+# Quit Pygame
+pygame.quit()
+sys.exit()
